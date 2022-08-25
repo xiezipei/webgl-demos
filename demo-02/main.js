@@ -43,11 +43,15 @@ function main() {
   // Initialize a shader program; this is where all the lighting
   // for the vertices and so forth is established.
 
+  // 初始化着色器程序
+
   const shaderProgram = initShaderProgram(gl, vsSource, fsSource);
 
   // Collect all the info needed to use the shader program.
   // Look up which attribute our shader program is using
   // for aVertexPosition and look up uniform locations.
+
+  // 收集所有程序信息
 
   const programInfo = {
     program: shaderProgram,
@@ -67,7 +71,7 @@ function main() {
 
   // Draw the scene
 
-  // 渲染到界面
+  // 场景渲染
 
   drawScene(gl, programInfo, buffers);
 }
