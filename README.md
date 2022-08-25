@@ -4,6 +4,9 @@
 
 ### demo-01
 
+DrawingRectangle：
+- 用 canvas 画一个蓝色正方形
+
 ## MDN
 
 ### demo-01
