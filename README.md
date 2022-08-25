@@ -1,9 +1,15 @@
 # webgl-demos
 
-## demo-01
+## WPG
 
-初始化画布
+### demo-01
 
-## demo-02
+## MDN
+
+### demo-01
+
+初始化 WebGL
+
+### demo-02
 
 画一个正方形
