@@ -4,8 +4,17 @@
 
 ### demo-01
 
-DrawingRectangle：
-- 用 canvas 画一个蓝色正方形
+#### DrawingRectangle
+
+用 canvas 画一个蓝色正方形
+
+#### HelloCanvas
+
+<!-- todo -->
+
+#### HelloPoint
+
+<!-- todo -->
 
 ## MDN
 

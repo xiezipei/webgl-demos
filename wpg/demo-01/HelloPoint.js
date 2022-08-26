@@ -1,4 +1,4 @@
-// 顶点着色器
+// 顶点着色器（GLSL ES语言）
 const VSHADER_SOURCE = `
     void main() {
         gl_Position = vec4(0.0, 0.0, 0.0, 1.0); // 设置坐标
@@ -6,7 +6,7 @@ const VSHADER_SOURCE = `
     }
 `;
 
-// 片着色器
+// 片着色器（GLSL ES语言）
 const FSHADER_SOURCE = `
     void main() {
         gl_FragColor = vec4(1.0, 0.0, 0.0, 1.0); // 设置颜色
