@@ -10,11 +10,11 @@
 
 #### HelloCanvas
 
-最小的 webgl 程序（使用 `clear()`）
+最小的 webgl 程序
 
 #### HelloPoint
 
-用 webgl 画一个点（使用 `drawArrays()`）
+用 webgl 画一个点
 
 ## MDN 示例
 

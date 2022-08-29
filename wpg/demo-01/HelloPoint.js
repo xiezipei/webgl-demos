@@ -25,6 +25,16 @@ function main() {
   }
 
   // 初始化着色器
+
+  /**
+   * 辅助函数 initShaders()：对字符串形式的着色器进行初始化
+   *
+   * 参数说明：
+   * gl 指定渲染上下文
+   * vshader 指定顶点着色器程序代码（字符串）
+   * fshader 指定片元着色器程序代码（字符串）
+   */
+
   if (!initShaders(gl, VSHADER_SOURCE, FSHADER_SOURCE)) {
     console.log('Failed to initialize shaders.');
     return;
