@@ -1,6 +1,6 @@
 # webgl-demos
 
-## WPG
+## WPG 示例
 
 ### demo-01
 
@@ -10,13 +10,13 @@
 
 #### HelloCanvas
 
-<!-- todo -->
+最小的 webgl 程序（使用 `clear()`）
 
 #### HelloPoint
 
-<!-- todo -->
+用 webgl 画一个点（使用 `drawArrays()`）
 
-## MDN
+## MDN 示例
 
 ### demo-01
 
@@ -25,3 +25,7 @@
 ### demo-02
 
 画一个正方形
+
+## 说明
+
+vscode 安装插件 `open in browser` 可以快速打开页面
