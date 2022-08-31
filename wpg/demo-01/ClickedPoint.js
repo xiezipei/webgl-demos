@@ -84,7 +84,7 @@ function click(ev, gl, canvas, a_Position) {
    */
 
   /**
-   * 能直接使用这两个坐标值！！！
+   * 不能直接使用这两个坐标值！！！
    * 1. 鼠标点击位置的坐标时“浏览器客户区“（client area）中的坐标，而不是在 <canvas> 中的
    * 2. <canvas> 的坐标系统与 webgl 的坐标系统，其原点位置和Y轴的正方向都不一样
    */
@@ -108,27 +108,30 @@ function click(ev, gl, canvas, a_Position) {
   // 第 1 步：
   // 是要知道 <canvas> 的中心点：
   // 获取 <canvas> 宽高：canvas.height, canvas,width，
-  // 中心坐标即为：(canvas.height/2, canvas.height/2)
+  // 中心坐标即为：(canvas.height / 2, canvas.height / 2)
 
   // 第 2 步：
-  // 使用 `(x - rect.left) - canvas.width/2` 和 `canvas.height/2 - (y - rect.top)`
+  // 使用 `(x - rect.left) - canvas.width / 2` 和 `canvas.height / 2 - (y - rect.top)`
   // 将 <canvas> 的原点平移到中心点（即 webgl 坐标系的原点）
 
   // 第 3 步：
   // <canvas> 的 x 轴坐标区间从 0 到 `canvas.width(400)`，而其 y 轴区间从 0 到 `canvas.height(400)`
   // 因为 webgl 的坐标区间为从 -1.0 到 1.0
   // 所以将 <canvas> 坐标映射到 webgl 坐标，需要：
-  // 将 x 坐标除以 `canvas.width/2`, 将 y 坐标除以 `canvas.height/2`
+  // 将 x 坐标除以 `canvas.width / 2`, 将 y 坐标除以 `canvas.height / 2`
 
   let rect = ev.target.getBoundingClientRect();
 
   console.log('<canvas>', `width = ${rect.width}`, `height = ${rect.height}`);
+  console.log('<canvas>坐标', `left = ${rect.left}`, `top = ${rect.top}`);
 
   x = (x - rect.left - canvas.height / 2) / (canvas.height / 2);
   y = (canvas.width / 2 - (y - rect.top)) / (canvas.width / 2);
 
   // 将坐标存储到 `g_points` 数组中
   g_points.push([x, y]); // 优化
+
+  console.log('webgl坐标', `x = ${x}`, `y = ${y}`);
 
   /**
    * //////////////////////////////////
