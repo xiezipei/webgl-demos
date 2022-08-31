@@ -77,29 +77,79 @@ const g_points = [];
  * @param {*} a_Position
  */
 function click(ev, gl, canvas, a_Position) {
-  // 鼠标点击的 x 坐标
-  let x = ev.clientX;
-  // 鼠标点击的 y 坐标
-  let y = ev.clientY;
+  /**
+   * //////////////////////////////////
+   * 1. 获取鼠标点击的位置，并存储在一个数组中
+   * //////////////////////////////////
+   */
 
-  // ?
+  /**
+   * 能直接使用这两个坐标值！！！
+   * 1. 鼠标点击位置的坐标时“浏览器客户区“（client area）中的坐标，而不是在 <canvas> 中的
+   * 2. <canvas> 的坐标系统与 webgl 的坐标系统，其原点位置和Y轴的正方向都不一样
+   */
+
+  /**
+   * 首先，你需要将坐标从浏览器客户区坐标系下转换到 <canvas> 坐标系下，然后再转换到 WebGL 坐标系下
+   * 怎么做呢？如下：
+   */
+
+  // 首先，获取在浏览器中的点击坐标
+  let x = ev.clientX;
+  let y = ev.clientY;
+  console.log('浏览器点击坐标', `x = ${x}`, `y = ${y}`);
+
+  // 然后，获取 <canvas> 在浏览器中的坐标
+  // `rect.left`, `rect,top` 是 <canvas> 的原点在浏览器中的坐标，
+  // 这样 `rect.left`, `rect,top` 就可以将点击坐标（x,y）转换为<canvas>坐标系下的坐标了
+
+  // 接下来，<canvas>坐标转换为 webgl 坐标:
+
+  // 第 1 步：
+  // 是要知道 <canvas> 的中心点：
+  // 获取 <canvas> 宽高：canvas.height, canvas,width，
+  // 中心坐标即为：(canvas.height/2, canvas.height/2)
+
+  // 第 2 步：
+  // 使用 `(x - rect.left) - canvas.width/2` 和 `canvas.height/2 - (y - rect.top)`
+  // 将 <canvas> 的原点平移到中心点（即 webgl 坐标系的原点）
+
+  // 第 3 步：
+  // <canvas> 的 x 轴坐标区间从 0 到 `canvas.width(400)`，而其 y 轴区间从 0 到 `canvas.height(400)`
+  // 因为 webgl 的坐标区间为从 -1.0 到 1.0
+  // 所以将 <canvas> 坐标映射到 webgl 坐标，需要：
+  // 将 x 坐标除以 `canvas.width/2`, 将 y 坐标除以 `canvas.height/2`
+
   let rect = ev.target.getBoundingClientRect();
-  // ?
+
+  console.log('<canvas>', `width = ${rect.width}`, `height = ${rect.height}`);
+
   x = (x - rect.left - canvas.height / 2) / (canvas.height / 2);
-  // ?
   y = (canvas.width / 2 - (y - rect.top)) / (canvas.width / 2);
 
-  // 将坐标存储到 g_points 数组中
-  g_points.push(x);
-  g_points.push(y);
+  // 将坐标存储到 `g_points` 数组中
+  g_points.push([x, y]); // 优化
+
+  /**
+   * //////////////////////////////////
+   * 2. 清空 <canvas>
+   * //////////////////////////////////
+   */
 
   // 清除 <canvas>
   gl.clear(gl.COLOR_BUFFER_BIT);
 
+  /**
+   * //////////////////////////////////
+   * 3. 根据数组的每个元素，在相应的位置绘制点
+   * //////////////////////////////////
+   */
+
   let len = g_points.length;
-  for (let i = 0; i < len; i += 2) {
+  for (let i = 0; i < len; i++) {
     // 将点的位置传递到变量中 a_Position
-    gl.vertexAttrib3f(a_Position, g_points[i], g_points[i + 1], 0.0);
+    const xy = g_points[i];
+    gl.vertexAttrib3f(a_Position, xy[0], xy[1], 0.0);
     // 绘制点
     gl.drawArrays(gl.POINTS, 0, 1);
   }
