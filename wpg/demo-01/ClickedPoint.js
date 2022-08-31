@@ -97,11 +97,13 @@ function click(ev, gl, canvas, a_Position) {
   // 首先，获取在浏览器中的点击坐标
   let x = ev.clientX;
   let y = ev.clientY;
-  console.log('浏览器点击坐标', `x = ${x}`, `y = ${y}`);
+  console.log('绘点在浏览器坐标', `(${x}, ${y})`);
 
   // 然后，获取 <canvas> 在浏览器中的坐标
   // `rect.left`, `rect,top` 是 <canvas> 的原点在浏览器中的坐标，
   // 这样 `rect.left`, `rect,top` 就可以将点击坐标（x,y）转换为<canvas>坐标系下的坐标了
+
+  // 补充说明：点击坐标减去偏移量，就得到 cavans 坐标，即 `(x - rect.left, y - rect.top)`，跟平时打开弹窗设置显示位置一样
 
   // 接下来，<canvas>坐标转换为 webgl 坐标:
 
@@ -110,28 +112,44 @@ function click(ev, gl, canvas, a_Position) {
   // 获取 <canvas> 宽高：canvas.height, canvas,width，
   // 中心坐标即为：(canvas.height / 2, canvas.height / 2)
 
+  // 补充说明：例如：canvas宽高400，那么webgl原点为：
+  // `(400/2, 400/2) = (200, 200)`
+
   // 第 2 步：
-  // 使用 `(x - rect.left) - canvas.width / 2` 和 `canvas.height / 2 - (y - rect.top)`
+  // 使用 `(x - rect.left) - canvas.width / 2` 和 `canvas.height / 2 - (y - rect.top)` // ????????
   // 将 <canvas> 的原点平移到中心点（即 webgl 坐标系的原点）
+
+  // 补充说明：其实相当于再算一次偏移量：知道了canvas原点、webgl原点，那么就想上面一样：
 
   // 第 3 步：
   // <canvas> 的 x 轴坐标区间从 0 到 `canvas.width(400)`，而其 y 轴区间从 0 到 `canvas.height(400)`
   // 因为 webgl 的坐标区间为从 -1.0 到 1.0
   // 所以将 <canvas> 坐标映射到 webgl 坐标，需要：
-  // 将 x 坐标除以 `canvas.width / 2`, 将 y 坐标除以 `canvas.height / 2`
+  // 将 x 坐标除以 `canvas.width / 2`, 将 y 坐标除以 `canvas.height / 2`（可以理解为占比）
 
   let rect = ev.target.getBoundingClientRect();
+  // console.log('rect', ev.target); // rect 为 <canvas>
+  console.log('canvas原点坐标', `(${rect.left}, ${rect.top})`);
+  console.log('绘点在canvas坐标', `(${x - rect.left}, ${y - rect.top})`);
+  console.log('canvas宽高', `${canvas.width} * ${canvas.height}`);
+  console.log('webgl原点坐标', `(${rect.left + canvas.width / 2}, ${rect.top + canvas.height / 2})`);
 
-  console.log('<canvas>', `width = ${rect.width}`, `height = ${rect.height}`);
-  console.log('<canvas>坐标', `left = ${rect.left}`, `top = ${rect.top}`);
+  // webgl原点距离浏览器最左边 = rect.left + canvas.width / 2
+  // 点击点距离浏览器最左边 = x
+  // 那么点击点距离webgl原点（x轴方向）= x - (rect.left + canvas.width / 2) // 如果为正数，则在原点右边，正方向，反之，如果为负数，则在原点左边，负方向
 
-  x = (x - rect.left - canvas.height / 2) / (canvas.height / 2);
-  y = (canvas.width / 2 - (y - rect.top)) / (canvas.width / 2);
+  // 同理：
+  // webgl原点距离浏览器最上边 = rect.top + canvas.height / 2
+  // 点击点距离浏览器最上边 = y
+  // 那么点击点距离webgl原点（y轴方向） = -(y - (rect.top + canvas.height / 2)) // 如果为正数，说明点击点更远，但是在webgl负方向，如果为负数，在webgl正方向，所以结果要加负号反转
+  // => -(y - rect.top - canvas.height / 2)
+  // => -y + react.top + canvas.height / 2
+
+  x = (x - rect.left - canvas.width / 2) / (canvas.width / 2);
+  y = -(y - (rect.top + canvas.height / 2)) / (canvas.height / 2);
 
   // 将坐标存储到 `g_points` 数组中
   g_points.push([x, y]); // 优化
-
-  console.log('webgl坐标', `x = ${x}`, `y = ${y}`);
 
   /**
    * //////////////////////////////////
